@@ -1,0 +1,42 @@
+name: e_hafiz_takip
+description: Kuran kursu ogrenci takip ve veli bilgilendirme sistemi.
+publish_to: 'none' # Bu satır uygulamanın yanlışlıkla pub.dev'e yüklenmesini engeller.
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # --- YARDIMCI PAKETLER ---
+  # iOS tarzı ikonlar için (Standart gelir)
+  cupertino_icons: ^1.0.2
+  # Tarih formatlamak için (Örn: "14 Ocak 2026" yazdırmak istersen lazım olur)
+  intl: ^0.20.2
+  
+  # --- PDF PAKETLERI ---
+  # PDF dosyası oluşturmak için
+  pdf: ^3.11.3
+  # PDF'i yazdırmak/indirmek için
+  printing: ^5.14.1
+  shared_preferences: ^2.5.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Kod yazım kurallarını denetler (Hataları azaltır)
+  flutter_lints: ^6.0.0
+
+flutter:
+  # Material Design ikonlarını ve temalarını aktif eder
+  uses-material-design: true
+  
+  # Uygurca font dosyası
+  assets:
+    - assets/fonts/
