@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'db_service.dart';
-import 'table_page.dart';
+import 'group_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<QuranTable> _tables = [];
+  List<Group> _groups = [];
   bool _isLoading = true;
 
   @override
@@ -21,26 +21,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadData() async {
-    final tables = await DbService.getTables();
+    final groups = await DbService.getGroups();
     setState(() {
-      _tables = tables;
+      _groups = groups;
       _isLoading = false;
     });
   }
 
   Future<void> _saveData() async {
-    await DbService.saveTables(_tables);
+    await DbService.saveGroups(_groups);
   }
 
-  void _addNewTable() {
-    TextEditingController titleController = TextEditingController();
+  void _addNewGroup() {
+    TextEditingController nameController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('يېڭى جەدۋەل قوشۇش'),
+        title: const Text('يېڭى گۇرۇپ قوشۇش'),
         content: TextField(
-          controller: titleController,
-          decoration: const InputDecoration(hintText: 'مەسىلەن: ئىككىنچى گۇرۇپ 2026/8/20'),
+          controller: nameController,
+          decoration: const InputDecoration(hintText: 'مەسىلەن: 1-گۇرۇپ'),
         ),
         actions: [
           TextButton(
@@ -49,12 +49,13 @@ class _HomePageState extends State<HomePage> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (titleController.text.trim().isNotEmpty) {
+              if (nameController.text.trim().isNotEmpty) {
                 setState(() {
-                  _tables.add(QuranTable(
+                  _groups.add(Group(
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
-                    title: titleController.text.trim(),
-                    records: [],
+                    name: nameController.text.trim(),
+                    students: [],
+                    sessions: [],
                   ));
                 });
                 _saveData();
@@ -68,12 +69,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _deleteTable(int index) {
+  void _deleteGroup(int index) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('ئۆچۈرۈش'),
-        content: const Text('بۇ جەدۋەلنى راستىنلا ئۆچۈرەمسىز؟'),
+        content: const Text('بۇ گۇرۇپنى راستىنلا ئۆچۈرەمسىز؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () {
               setState(() {
-                _tables.removeAt(index);
+                _groups.removeAt(index);
               });
               _saveData();
               Navigator.pop(context);
@@ -99,34 +100,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('قۇرئان ئوقۇش جەدۋىلى'),
+        title: const Text('قۇرئان ئوقۇش گۇرۇپپىلىرى'),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _tables.isEmpty
-              ? const Center(child: Text('ھېچقانداق جەدۋەل يوق. يېڭىدىن قوشۇڭ.'))
+          : _groups.isEmpty
+              ? const Center(child: Text('ھېچقانداق گۇرۇپ يوق. يېڭىدىن قوشۇڭ.'))
               : ListView.builder(
-                  itemCount: _tables.length,
+                  itemCount: _groups.length,
                   itemBuilder: (context, index) {
-                    final table = _tables[index];
+                    final group = _groups[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ListTile(
-                        title: Text(table.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('${table.records.length} قۇر مەلۇمات بار'),
+                        title: Text(group.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text('${group.students.length} ئوقۇغۇچى، ${group.sessions.length} كۈنلۈك خاتىرە بار'),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _deleteTable(index),
+                          onPressed: () => _deleteGroup(index),
                         ),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TablePage(
-                                quranTable: table,
-                                onSave: (updatedTable) {
+                              builder: (context) => GroupPage(
+                                group: group,
+                                onSave: (updatedGroup) {
                                   setState(() {
-                                    _tables[index] = updatedTable;
+                                    _groups[index] = updatedGroup;
                                   });
                                   _saveData();
                                 },
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addNewTable,
+        onPressed: _addNewGroup,
         child: const Icon(Icons.add),
       ),
     );
