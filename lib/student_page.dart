@@ -173,51 +173,57 @@ class _StudentPageState extends State<StudentPage> {
       ),
       body: _student.records.isEmpty
           ? const Center(child: Text('ئوقۇش خاتىرىسى يوق. يېڭىدىن قوشۇڭ.'))
-          : SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+          : SizedBox(
+              width: double.infinity,
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('چېسلا', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('سۈرە (باش)', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('ئايەت', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('سۈرە (ئاخىر)', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('ئايەت', style: TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text('مەشغۇلات', style: TextStyle(fontWeight: FontWeight.bold))),
-                  ],
-                  rows: _student.records.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    ReadingRecord record = entry.value;
-                    
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(record.dateString)),
-                        DataCell(Text(record.startSurah)),
-                        DataCell(Text(record.startAyah?.toString() ?? '')),
-                        DataCell(Text(record.endSurah)),
-                        DataCell(Text(record.endAyah?.toString() ?? '')),
-                        DataCell(Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () => _showRecordDialog(record: record, index: index),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteRecord(index),
-                            ),
-                          ],
-                        )),
+                scrollDirection: Axis.vertical,
+                child: Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: const [
+                        DataColumn(label: Text('چېسلا', style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('سۈرە (باش)', style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('ئايەت', style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('سۈرە (ئاخىر)', style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('ئايەت', style: TextStyle(fontWeight: FontWeight.bold))),
+                        DataColumn(label: Text('مەشغۇلات', style: TextStyle(fontWeight: FontWeight.bold))),
                       ],
-                    );
-                  }).toList(),
+                      rows: _student.records.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        ReadingRecord record = entry.value;
+                        
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(record.dateString)),
+                            DataCell(Text(record.startSurah)),
+                            DataCell(Text(record.startAyah?.toString() ?? '')),
+                            DataCell(Text(record.endSurah)),
+                            DataCell(Text(record.endAyah?.toString() ?? '')),
+                            DataCell(Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.blue),
+                                  onPressed: () => _showRecordDialog(record: record, index: index),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _deleteRecord(index),
+                                ),
+                              ],
+                            )),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showRecordDialog(),
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text('يېڭى دەرىس قوشۇش'),
       ),
     );
   }
