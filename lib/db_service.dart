@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart';
 
 class DbService {
-  static const String _key = 'quran_groups_v2';
+  static const String _key = 'quran_groups_v3';
 
   static Future<List<Group>> getGroups() async {
     final prefs = await SharedPreferences.getInstance();

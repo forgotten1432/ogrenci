@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     name: nameController.text.trim(),
                     students: [],
-                    sessions: [],
                   ));
                 });
                 _saveData();
@@ -114,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ListTile(
                         title: Text(group.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('${group.students.length} ئوقۇغۇچى، ${group.sessions.length} كۈنلۈك خاتىرە بار'),
+                        subtitle: Text('${group.students.length} ئوقۇغۇچى بار'),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () => _deleteGroup(index),
